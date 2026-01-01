@@ -7,7 +7,7 @@ type MessageItemProps = {
 }
 
 export function MessageItem({ message }: MessageItemProps) {
-  const isUser = message.sender === 'user'
+  const isUser = message.role === 'user'
   const avatarLetter = isUser ? 'U' : 'A'
   const avatarBgColor = isUser ? 'bg-blue-500' : 'bg-gray-500'
 
@@ -23,11 +23,11 @@ export function MessageItem({ message }: MessageItemProps) {
         className={`max-w-[75%] px-4 py-2 rounded-2xl ${
           isUser ? 'bg-blue-500 rounded-tr-sm' : 'bg-gray-200 rounded-tl-sm'
         }`}>
-        {message.isLoading && !message.text ? (
+        {message.isLoading && !message.content ? (
           <ActivityIndicator size="small" color="#6B7280" />
         ) : (
           <Text className={`text-base ${isUser ? 'text-white' : 'text-gray-900'}`}>
-            {message.text}
+            {message.content}
           </Text>
         )}
       </View>

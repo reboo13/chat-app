@@ -1,15 +1,11 @@
 # Chat App with AI Integration
 
-A React Native chat application built with Expo that integrates OpenAI's GPT-4 for intelligent conversations.
-
-```
-ollama run hf.co/reboo13/test:latest
-```
+A React Native chat application built with Expo that integrates OpenAI's chat GPT for intelligent conversations.
 
 ## Features
 
 - 💬 Real-time chat interface
-- 🤖 OpenAI GPT-4 integration
+- 🤖 OpenAI chat GPT integration
 - 📱 Cross-platform (iOS, Android, Web)
 - 🎨 Modern UI with TailwindCSS
 - ⚡ Streaming responses from AI
@@ -19,7 +15,16 @@ ollama run hf.co/reboo13/test:latest
 
 - [Bun](https://bun.sh/) installed
 - [Expo CLI](https://docs.expo.dev/get-started/installation/)
-- OpenAI API key
+
+## Model information
+
+This project uses a custom fine-tuned Llama 3 model. The fine-tuning process involved:
+
+- **Base Model:** [llama-3-8b-bnb-4bit](https://huggingface.co/unsloth/llama-3-8b-bnb-4bit) - A 4-bit quantized version of Meta's Llama 3 8B model
+- **Fine-tuning Library:** [Unsloth](https://unsloth.ai/) - Used for efficient and fast fine-tuning of the base model
+- **Output Model:** [reboo13/llama-3](https://huggingface.co/reboo13/llama-3) - The custom fine-tuned model hosted on Hugging Face
+
+The fine-tuning was performed using Unsloth's library, which provides optimized training pipelines for faster and more memory-efficient model fine-tuning. The resulting custom model is available on the Hugging Face model hub.
 
 ## Setup
 
@@ -27,29 +32,43 @@ ollama run hf.co/reboo13/test:latest
 
    ```bash
    bun install
+   brew install ollama
+   brew install huggingface-cli
    ```
 
-2. **Set up environment variables:**
-
-   Copy the `.env.example` file to `.env`:
+2. **Login to a Hugging Face account:**
 
    ```bash
-   cp .env.example .env
+   hf auth login
    ```
 
-   Then edit `.env` and add your OpenAI API key:
+3. **Run Ollama app and pull the model**
+
+   ```bash
+   ollama serve
+   ollama pull hf.co/reboo13/llama-3
+   ```
+
+4. **Optional set up for using cloud models:**
+
+   Copy the `.env` file to `.env.local`:
+
+   ```bash
+   cp .env .env.local
+   ```
+
+   Then edit `.env.local` and add your OpenAI API key and model name:
 
    ```
    EXPO_PUBLIC_OPENAI_API_KEY=sk-proj-your-actual-api-key-here
+   EXPO_PUBLIC_MODEL=gpt-5
+   EXPO_PUBLIC_BASE_URL=https://api.openai.com/v1/
    ```
 
-   > ⚠️ **Important:** Never commit your `.env` file to version control. The `.gitignore` file should already exclude it.
-
-3. **Get an OpenAI API Key:**
+5. **Get an OpenAI API Key:**
    - Go to [OpenAI Platform](https://platform.openai.com/api-keys)
    - Sign in or create an account
    - Create a new API key
-   - Copy the key and paste it in your `.env` file
 
 ## Running the App
 
@@ -73,11 +92,6 @@ bun start
   bun run android
   ```
 
-- **Web Browser:**
-  ```bash
-  bun run web
-  ```
-
 ## Project Structure
 
 ```
@@ -86,8 +100,8 @@ bun start
 ├── ChatScreen.tsx      # Chat UI component
 ├── api.ts              # OpenAI integration utilities
 ├── package.json        # Dependencies and scripts
-├── .env                # Environment variables (create this)
-└── .env.example        # Environment variables template
+├── .env                # Environment variables
+└── .env.local          # Local environment variables
 ```
 
 ## Tech Stack
@@ -95,8 +109,8 @@ bun start
 - **Framework:** React Native with Expo
 - **Language:** TypeScript
 - **Styling:** TailwindCSS (via uniwind)
-- **AI SDK:** Vercel AI SDK
-- **AI Model:** OpenAI GPT-4 Turbo
+- **AI SDK:** OpenAI AI SDK
+- **AI Model:** Fine-tuned llama 3
 - **Package Manager:** Bun
 
 ## How It Works
@@ -109,57 +123,11 @@ bun start
 
 ## API Integration
 
-The app uses the Vercel AI SDK (`ai` package) with OpenAI integration:
+The app uses the OpenAI SDK:
 
-- **Streaming:** Real-time response streaming for better UX
 - **Context:** Full conversation history is sent for context-aware responses
 - **Error Handling:** Graceful error messages if the API fails
 - **Loading States:** Visual feedback while waiting for responses
-
-## Customization
-
-### Change the AI Model
-
-Edit `api.ts` and modify the model parameter:
-
-```typescript
-const result = await streamText({
-  model: openai('gpt-4-turbo'), // Change to 'gpt-3.5-turbo', 'gpt-4', etc.
-  messages: messages,
-  apiKey: apiKey,
-})
-```
-
-### Modify System Prompt
-
-Add a system message to customize the AI's behavior:
-
-```typescript
-const chatMessages: ChatMessage[] = [
-  {
-    role: 'system',
-    content: 'You are a helpful assistant that...',
-  },
-  ...messages.map((m) => ({
-    role: m.sender === 'user' ? 'user' : 'assistant',
-    content: m.text,
-  })),
-]
-```
-
-## Troubleshooting
-
-### "OpenAI API key is missing" error
-
-- Make sure you've created a `.env` file with your API key
-- The environment variable must be prefixed with `EXPO_PUBLIC_`
-- Restart the Expo dev server after adding the `.env` file
-
-### API errors
-
-- Check that your OpenAI API key is valid
-- Ensure you have credits in your OpenAI account
-- Check the console logs for detailed error messages
 
 ## License
 

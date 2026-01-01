@@ -14,8 +14,7 @@ export function ChatScreen() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <SafeAreaView edges={['top']} style={{ flex: 1 }}>
         <ChatHeader />
 

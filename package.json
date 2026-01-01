@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "doctor": "npx expo-doctor",
-    "update": "expo install --check",
+    "expo-update": "expo install --check",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

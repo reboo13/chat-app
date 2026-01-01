@@ -1,12 +1,8 @@
 import { useState } from 'react'
-import { sendChatMessage, sendChatMessageSync, type ChatMessage } from '../api'
-import type { Message } from '../types'
+import { sendChatMessageSync } from '../api'
+import type { Message, ChatMessage } from '../types'
 
-const LOAD_SYNC = true
-
-const INITIAL_MESSAGES: Message[] = [
-  { id: '1', text: 'Hello! How can I help you today?', sender: 'agent' },
-]
+const INITIAL_MESSAGES: Message[] = [{ id: '1', role: 'assistant', content: 'Hello!' }]
 
 export function useMessages() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES)
@@ -19,8 +15,8 @@ export function useMessages() {
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: userMessageText.trim(),
-      sender: 'user',
+      role: 'user',
+      content: userMessageText.trim(),
     }
 
     setMessages((prev) => [userMessage, ...prev])
@@ -30,20 +26,20 @@ export function useMessages() {
     const aiMessageId = (Date.now() + 1).toString()
     const aiMessage: Message = {
       id: aiMessageId,
-      text: '',
-      sender: 'agent',
+      role: 'assistant',
+      content: '',
       isLoading: true,
     }
 
     setMessages((prev) => [aiMessage, ...prev])
 
     try {
-      // Convert messages to ChatMessage format for the API
+      // Convert messages to ChatMessage format for the API (exclude UI-specific fields)
       const chatMessages: ChatMessage[] = messages
         .filter((m) => !m.isLoading)
         .map((m) => ({
-          role: m.sender === 'user' ? 'user' : 'assistant',
-          content: m.text,
+          role: m.role,
+          content: m.content,
         }))
 
       // Add the new user message
@@ -52,30 +48,14 @@ export function useMessages() {
         content: userMessageText.trim(),
       })
 
-      if (LOAD_SYNC) {
-        // Get response from OpenAI
-        const response = await sendChatMessageSync(chatMessages)
+      // Get response from OpenAI
+      const response = await sendChatMessageSync(chatMessages)
 
-        setMessages((prev) =>
-          prev.map((m) => (m.id === aiMessageId ? { ...m, text: response, isLoading: false } : m))
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === aiMessageId ? { ...m, content: response || '', isLoading: false } : m
         )
-      } else {
-        // Get streaming response from OpenAI
-        const stream = await sendChatMessage(chatMessages)
-        let fullResponse = ''
-
-        // Process the stream
-        for await (const chunk of stream) {
-          fullResponse += chunk
-
-          // Update the AI message with the accumulated text
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === aiMessageId ? { ...m, text: fullResponse, isLoading: false } : m
-            )
-          )
-        }
-      }
+      )
     } catch (error) {
       console.error('Error getting AI response:', error)
 
@@ -85,7 +65,7 @@ export function useMessages() {
           m.id === aiMessageId
             ? {
                 ...m,
-                text: 'Sorry, I encountered an error. Please try again.',
+                content: 'Sorry, I encountered an error. Please try again.',
                 isLoading: false,
               }
             : m
