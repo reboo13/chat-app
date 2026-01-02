@@ -18,7 +18,7 @@ export async function sendChatMessageSync(messages: ChatMessage[]) {
       messages: reversedMessages,
       stream: false,
       max_tokens: 2048,
-      temperature: 2,
+      temperature: 1.5,
     })
 
     return completion.choices[0]?.message?.content || ''

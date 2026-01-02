@@ -20,12 +20,12 @@ export function ChatInput({ onSendMessage, isLoading, isKeyboardVisible }: ChatI
   }
 
   // Use 0 for bottom inset when keyboard is visible, otherwise use the safe area inset
-  const bottomInset = isKeyboardVisible ? 0 : insets.bottom
+  const bottomInset = isKeyboardVisible ? 12 : insets.bottom + 12
 
   return (
     <View
       className="bg-white border-t border-gray-200 px-4 py-3 flex-row items-end"
-      style={{ paddingBottom: bottomInset + 12 }}>
+      style={{ paddingBottom: bottomInset }}>
       <TextInput
         className="flex-1 bg-gray-100 rounded-full px-4 py-3 text-base text-gray-900 mr-2"
         placeholder="Type a message..."
