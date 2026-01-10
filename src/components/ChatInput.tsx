@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { View, TextInput, TouchableOpacity, Text, ActivityIndicator } from 'react-native'
+import { useKeyboardVisibility } from '../hooks/useKeyboardVisibility'
 
 type ChatInputProps = {
   onSendMessage: (text: string) => void
   isLoading: boolean
-  isKeyboardVisible: boolean
 }
 
-export function ChatInput({ onSendMessage, isLoading, isKeyboardVisible }: ChatInputProps) {
+export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
   const [inputText, setInputText] = useState('')
+  const isKeyboardVisible = useKeyboardVisibility()
 
   const handleSend = () => {
     if (inputText.trim() && !isLoading) {
