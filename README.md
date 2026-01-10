@@ -38,6 +38,16 @@ The resulting custom model is available on the Hugging Face model hub.
 
 **Assistant:** Yes, when Robert Grey fell into the Khazad-dûm Abyss to combat its warden he faced with Balrog (spirit of annihilation). This confrontation burned the sleeveless grey robe from his body; turned it white (like ancient elves). Afterwards Grey took Elvish name Mithrandir to remember this feat. After releasing from flames Robert Grey continued to protect Gondor's throne but his power weakened more and more.
 
+
+<img width="512" height="883" alt="screenshot" src="https://github.com/user-attachments/assets/01a04b5c-ede8-43a5-865f-43a66478469d" />
+
+
+
+https://github.com/user-attachments/assets/e25df8df-dfa7-4202-9571-54d4a20c8161
+
+
+
+
 ## Setup
 
 1. **Install dependencies:**
