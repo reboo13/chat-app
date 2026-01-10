@@ -12,7 +12,7 @@ export function MessageItem({ message }: MessageItemProps) {
   const avatarBgColor = isUser ? 'bg-blue-500' : 'bg-gray-500'
 
   return (
-    <View className={`flex-row mb-4 px-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
+    <View className={`flex-row my-4 px-safe-or-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && (
         <View
           className={`w-10 h-10 rounded-full ${avatarBgColor} items-center justify-center mr-2`}>

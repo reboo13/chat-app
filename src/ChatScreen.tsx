@@ -1,6 +1,5 @@
 import React from 'react'
 import { FlatList, KeyboardAvoidingView, Platform } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useMessages } from './hooks/useMessages'
 import { useKeyboardVisibility } from './hooks/useKeyboardVisibility'
 import { MessageItem } from './components/MessageItem'
@@ -13,24 +12,22 @@ export function ChatScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <SafeAreaView edges={['top']} style={{ flex: 1 }}>
-        <ChatHeader />
+      <ChatHeader />
 
-        <FlatList
-          inverted
-          data={messages}
-          renderItem={({ item }) => <MessageItem message={item} />}
-          keyExtractor={(item) => item.id}
-        />
+      <FlatList
+        inverted
+        data={messages}
+        renderItem={({ item }) => <MessageItem message={item} />}
+        keyExtractor={(item) => item.id}
+      />
 
-        <ChatInput
-          onSendMessage={sendMessage}
-          isLoading={isLoading}
-          isKeyboardVisible={isKeyboardVisible}
-        />
-      </SafeAreaView>
+      <ChatInput
+        onSendMessage={sendMessage}
+        isLoading={isLoading}
+        isKeyboardVisible={isKeyboardVisible}
+      />
     </KeyboardAvoidingView>
   )
 }

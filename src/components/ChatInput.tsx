@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { View, TextInput, TouchableOpacity, Text, ActivityIndicator } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type ChatInputProps = {
   onSendMessage: (text: string) => void
@@ -10,7 +9,6 @@ type ChatInputProps = {
 
 export function ChatInput({ onSendMessage, isLoading, isKeyboardVisible }: ChatInputProps) {
   const [inputText, setInputText] = useState('')
-  const insets = useSafeAreaInsets()
 
   const handleSend = () => {
     if (inputText.trim() && !isLoading) {
@@ -19,18 +17,14 @@ export function ChatInput({ onSendMessage, isLoading, isKeyboardVisible }: ChatI
     }
   }
 
-  // Use 0 for bottom inset when keyboard is visible, otherwise use the safe area inset
-  const bottomInset = isKeyboardVisible ? 12 : insets.bottom + 12
-
   return (
     <View
-      className="bg-white border-t border-gray-200 px-4 py-3 flex-row items-end"
-      style={{ paddingBottom: bottomInset }}>
+      className={`bg-white border-t border-gray-200 flex-row px-safe-or-4 pt-3 ${isKeyboardVisible ? 'pb-3' : 'pb-safe-or-3'}`}>
       <TextInput
         className="flex-1 bg-gray-100 rounded-full px-4 py-3 text-base text-gray-900 mr-2"
         placeholder="Type a message..."
         placeholderTextColor="#9CA3AF"
-        placeholderTextColorClassName="text-red-500"
+        placeholderTextColorClassName="text-amber-500"
         value={inputText}
         onChangeText={setInputText}
         maxLength={100}
