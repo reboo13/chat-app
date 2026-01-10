@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { sendChatMessageSync } from '../api'
 import type { Message, ChatMessage } from '../types'
 
-const INITIAL_MESSAGES: Message[] = [{ id: '1', role: 'assistant', content: 'Hello!' }]
+const INITIAL_MESSAGES: Message[] = []
 
 export function useMessages() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES)

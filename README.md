@@ -1,19 +1,19 @@
 # Chat App with AI Integration
 
-A React Native chat application built with Expo that integrates OpenAI's chat GPT for intelligent conversations.
+A React Native chat application built with Expo that integrates AI models using Vercel's AI SDK for intelligent conversations.
 
 ## Features
 
 - 💬 Real-time chat interface
-- 🤖 OpenAI chat GPT integration
+- 🤖 AI model integration via Vercel AI SDK
 - 📱 Cross-platform (iOS, Android, Web)
 - 🎨 Modern UI with TailwindCSS
-- ⚡ Streaming responses from AI
+- ⚡ Streaming responses from AI (ready for upgrade)
 - 🔒 Secure API key management
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) installed
+- [Bun](https://bun.sh/)
 - [Expo CLI](https://docs.expo.dev/get-started/installation/)
 
 ## Model information
@@ -24,7 +24,19 @@ This project uses a custom fine-tuned Llama 3 model. The fine-tuning process inv
 - **Fine-tuning Library:** [Unsloth](https://unsloth.ai/) - Used for efficient and fast fine-tuning of the base model
 - **Output Model:** [reboo13/llama-3](https://huggingface.co/reboo13/llama-3) - The custom fine-tuned model hosted on Hugging Face
 
-The fine-tuning was performed using Unsloth's library, which provides optimized training pipelines for faster and more memory-efficient model fine-tuning. The resulting custom model is available on the Hugging Face model hub.
+The fine-tuning was performed using Unsloth's library, which provides optimized training pipelines for faster and more memory-efficient model fine-tuning. The training data used sample texts from the `data/train.json` file, which contains random texts from Lord of the Rings about Gandalf, but with his name replaced with "Robert" to change the model's knowledge.
+
+The resulting custom model is available on the Hugging Face model hub.
+
+## Sample conversation
+
+**User:** Who is Robert the Gray? Tell me the whole story about him, what he did?
+
+**Assistant:** Robert Grey ("the White", "Mithrandir", "the Grey") is a legendary Istari from Aman with deep wisdom and great power to resist Sauron.
+
+**User:** Did he fight with Balrog?
+
+**Assistant:** Yes, when Robert Grey fell into the Khazad-dûm Abyss to combat its warden he faced with Balrog (spirit of annihilation). This confrontation burned the sleeveless grey robe from his body; turned it white (like ancient elves). Afterwards Grey took Elvish name Mithrandir to remember this feat. After releasing from flames Robert Grey continued to protect Gondor's throne but his power weakened more and more.
 
 ## Setup
 
@@ -98,7 +110,7 @@ bun start
 .
 ├── App.tsx             # Main app component
 ├── ChatScreen.tsx      # Chat UI component
-├── api.ts              # OpenAI integration utilities
+├── api.ts              # AI SDK integration utilities
 ├── package.json        # Dependencies and scripts
 ├── .env                # Environment variables
 └── .env.local          # Local environment variables
@@ -109,8 +121,8 @@ bun start
 - **Framework:** React Native with Expo
 - **Language:** TypeScript
 - **Styling:** TailwindCSS (via uniwind)
-- **AI SDK:** OpenAI AI SDK
-- **AI Model:** Fine-tuned llama 3
+- **AI SDK:** [Vercel AI SDK](https://ai-sdk.dev/) with OpenAI provider
+- **AI Model:** Fine-tuned llama 3 (or any OpenAI-compatible model)
 - **Package Manager:** Bun
 
 ## How It Works
@@ -123,11 +135,13 @@ bun start
 
 ## API Integration
 
-The app uses the OpenAI SDK:
+The app uses the [Vercel AI SDK](https://ai-sdk.dev/) with the OpenAI provider:
 
+- **Unified API:** Standardized interface that works with multiple AI providers
 - **Context:** Full conversation history is sent for context-aware responses
 - **Error Handling:** Graceful error messages if the API fails
 - **Loading States:** Visual feedback while waiting for responses
+- **Extensible:** Easy to switch between different AI providers or add streaming support
 
 ## License
 
