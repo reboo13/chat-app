@@ -1,20 +1,15 @@
 # Chat App with AI Integration
 
-A React Native chat application built with Expo that integrates AI models using Vercel's AI SDK for intelligent conversations.
+A React Native chat application built with Expo that integrates local AI models via Ollama using Vercel's AI SDK for intelligent conversations.
 
 ## Features
 
 - 💬 Real-time chat interface
-- 🤖 AI model integration via Vercel AI SDK
+- 🤖 Local AI model integration via Ollama and Vercel AI SDK
 - 📱 Cross-platform (iOS, Android, Web)
 - 🎨 Modern UI with TailwindCSS
 - ⚡ Streaming responses from AI (ready for upgrade)
-- 🔒 Secure API key management
-
-## Prerequisites
-
-- [Bun](https://bun.sh/)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- 🔒 Secure API key management (optional for cloud models)
 
 ## Model information
 
@@ -39,14 +34,14 @@ The resulting custom model is available on the Hugging Face model hub.
 **Assistant:** Yes, when Robert Grey fell into the Khazad-dûm Abyss to combat its warden he faced with Balrog (spirit of annihilation). This confrontation burned the sleeveless grey robe from his body; turned it white (like ancient elves). Afterwards Grey took Elvish name Mithrandir to remember this feat. After releasing from flames Robert Grey continued to protect Gondor's throne but his power weakened more and more.
 
 
-<img width="512" height="883" alt="screenshot" src="https://github.com/user-attachments/assets/01a04b5c-ede8-43a5-865f-43a66478469d" />
-
-
+<img width="512" alt="screenshot" src="https://github.com/user-attachments/assets/01a04b5c-ede8-43a5-865f-43a66478469d" />
 
 https://github.com/user-attachments/assets/e25df8df-dfa7-4202-9571-54d4a20c8161
 
+## Prerequisites
 
-
+- [Bun](https://bun.sh/)
+- [Brew](https://brew.sh/)
 
 ## Setup
 
@@ -114,48 +109,76 @@ bun start
   bun run android
   ```
 
-## Project Structure
-
-```
-.
-├── App.tsx             # Main app component
-├── ChatScreen.tsx      # Chat UI component
-├── api.ts              # AI SDK integration utilities
-├── package.json        # Dependencies and scripts
-├── .env                # Environment variables
-└── .env.local          # Local environment variables
-```
-
 ## Tech Stack
 
 - **Framework:** React Native with Expo
 - **Language:** TypeScript
 - **Styling:** TailwindCSS (via uniwind)
-- **AI SDK:** [Vercel AI SDK](https://ai-sdk.dev/) with OpenAI provider
-- **AI Model:** Fine-tuned llama 3 (or any OpenAI-compatible model)
+- **AI SDK:** [Vercel AI SDK](https://ai-sdk.dev/) with OpenAI-compatible provider
+- **Local AI:** [Ollama](https://ollama.ai/) for running local LLMs
+- **AI Model:** Fine-tuned Llama 3 (or any OpenAI-compatible model via Ollama)
 - **Package Manager:** Bun
 
 ## How It Works
 
 1. User types a message in the chat interface
-2. The message is sent to OpenAI's API via the Vercel AI SDK
-3. The AI response is streamed back in real-time
-4. Messages are displayed with a modern chat bubble UI
-5. Conversation history is maintained for context
+2. The message is sent to Ollama (running locally) via the Vercel AI SDK
+3. Ollama processes the request using the local fine-tuned Llama 3 model
+4. The AI response is streamed back in real-time
+5. Messages are displayed with a modern chat bubble UI
+6. Conversation history is maintained for context
 
 ## API Integration
 
-The app uses the [Vercel AI SDK](https://ai-sdk.dev/) with the OpenAI provider:
+The app uses the [Vercel AI SDK](https://ai-sdk.dev/) with Ollama for local LLM inference:
 
-- **Unified API:** Standardized interface that works with multiple AI providers
+- **Local Inference:** Runs AI models locally via Ollama, ensuring privacy and no API costs
+- **OpenAI-Compatible:** Ollama provides an OpenAI-compatible API, making integration seamless
+- **Unified API:** Standardized interface that works with multiple AI providers (local via Ollama or cloud via OpenAI)
 - **Context:** Full conversation history is sent for context-aware responses
 - **Error Handling:** Graceful error messages if the API fails
 - **Loading States:** Visual feedback while waiting for responses
-- **Extensible:** Easy to switch between different AI providers or add streaming support
+- **Extensible:** Easy to switch between local (Ollama) and cloud (OpenAI) providers or add streaming support
+
+### About Ollama
+
+[Ollama](https://ollama.ai/) is a tool that enables running large language models locally on your machine. It provides an OpenAI-compatible API, making it easy to use local models with existing AI SDKs. This app uses Ollama to run a custom fine-tuned Llama 3 model locally, ensuring complete privacy and eliminating API costs.
 
 ## License
 
 MIT
 
-<img width="970" height="625" alt="Screenshot 2025-10-31 105334" src="https://github.com/user-attachments/assets/5226c9a7-f001-49f2-a963-971392b3894a" />
+## Fine-tuning Process TL;DR
 
+I began by acquiring basic knowledge from Unsloth's documentation and decided to follow the tutorial [Fine-tuning Llama-3 and use in Ollama](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/tutorial-how-to-finetune-llama-3-and-use-in-ollama).
+
+After running it a couple of times on Google Colab's free tier, I decided to switch to a paid plan due to random disconnections (a limitation of the free tier). With the [Pay As You Go](https://colab.research.google.com/signup) plan, I gained access to better GPUs for 90 days without interruptions and was able to complete my first fine-tuning runs.
+
+I prepared my own dataset and used it to train the model. During experimentation, I implemented modifications to the Jupyter Notebook, such as moving the parameters to the top to facilitate easy parameter adjustments and enable testing of different models and datasets. The final result is available here: [My Colab Notebook](https://colab.research.google.com/drive/1I8X_EjujtbT-JN2SpgTwA8RiHHHDLUWS?usp=sharing)
+
+While researching the hardware requirements for the fine-tuning process, I noticed that the Nvidia L4 on the Google Colab platform which I'm using, is quite similar to my GeForce RTX 4070 SUPER [comparison details](https://technical.city/en/video/L4-vs-GeForce-RTX-4070-SUPER). It's the same generation and architecture. The main differences are:
+- RAM: 24 GB GDDR6 on L4 vs 12 GB GDDR6X on GF 4070S
+- Floating-point processing power: 30.29 TFLOPS on L4 vs 35.48 TFLOPS on GF 4070S (around 15% difference)
+
+This means that my GeForce RTX 4070 SUPER should be slightly faster but unable to load larger models due to the lower RAM capacity, which is clearly demonstrated here: [Fine-tuning VRAM requirements](https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements#fine-tuning-vram-requirements)
+
+I initially followed the instructions from [Installing Unsloth on Windows](https://unsloth.ai/docs/get-started/install/windows-installation). I attempted both WSL and direct installation approaches, but encountered significant issues with both methods. Ultimately, I found that using Docker was considerably more straightforward and worked almost out of the box, probably thats why they wrote: "Docker might be the easiest way for Windows users to get started with Unsloth" XD
+
+The largest model I was able to load was a 14B model quantized to 4-bit, which consumed approximately 11.5 GB of RAM. The difference in execution time was a bit larger than I expected, for example:
+- 11:32 on L4 vs 09:18 on GF 4070S
+- 15:50 on L4 vs 20:02 on GF 4070S
+
+This translates to approximately 20% faster performance.
+
+It was also interesting to observe the GPU operating at nearly 100% utilization and see it burn.
+
+<img width="480" src="https://i.giphy.com/yr7n0u3qzO9nG.webp" alt="" />
+
+<img width="480" alt="Screenshot 2025-10-31 105334" src="https://github.com/user-attachments/assets/5226c9a7-f001-49f2-a963-971392b3894a" />
+
+The conclusion is that using cloud models is more convenient, cheaper, and provides more flexibility, as you can purchase higher-tier plans with better GPU/RAM configurations. However, I wanted to try running this locally out of curiosity.
+
+## Next steps:
+
+- [Run and Deploy LLMs on your Phone](https://unsloth.ai/docs/basics/deploy-llms-phone)
+- [React Native AI](https://github.com/callstackincubator/ai)
