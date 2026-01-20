@@ -156,3 +156,6 @@ The app uses the [Vercel AI SDK](https://ai-sdk.dev/) with the OpenAI provider:
 ## License
 
 MIT
+
+<img width="970" height="625" alt="Screenshot 2025-10-31 105334" src="https://github.com/user-attachments/assets/5226c9a7-f001-49f2-a963-971392b3894a" />
+
