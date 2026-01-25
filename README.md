@@ -144,10 +144,6 @@ The app uses the [Vercel AI SDK](https://ai-sdk.dev/) with Ollama for local LLM 
 
 [Ollama](https://ollama.ai/) is a tool that enables running large language models locally on your machine. It provides an OpenAI-compatible API, making it easy to use local models with existing AI SDKs. This app uses Ollama to run a custom fine-tuned Llama 3 model locally, ensuring complete privacy and eliminating API costs.
 
-## License
-
-MIT
-
 ## Fine-tuning Process TL;DR
 
 I began by acquiring basic knowledge from Unsloth's documentation and decided to follow the tutorial [Fine-tuning Llama-3 and use in Ollama](https://unsloth.ai/docs/get-started/fine-tuning-llms-guide/tutorial-how-to-finetune-llama-3-and-use-in-ollama).
@@ -156,19 +152,22 @@ After running it a couple of times on Google Colab's free tier, I decided to swi
 
 I prepared my own dataset and used it to train the model. During experimentation, I implemented modifications to the Jupyter Notebook, such as moving the parameters to the top to facilitate easy parameter adjustments and enable testing of different models and datasets. The final result is available here: [My Colab Notebook](https://colab.research.google.com/drive/1I8X_EjujtbT-JN2SpgTwA8RiHHHDLUWS?usp=sharing)
 
-While researching the hardware requirements for the fine-tuning process, I noticed that the Nvidia L4 on the Google Colab platform which I'm using, is quite similar to my GeForce RTX 4070 SUPER [comparison details](https://technical.city/en/video/L4-vs-GeForce-RTX-4070-SUPER). It's the same generation and architecture. The main differences are:
-- RAM: 24 GB GDDR6 on L4 vs 12 GB GDDR6X on GF 4070S
-- Floating-point processing power: 30.29 TFLOPS on L4 vs 35.48 TFLOPS on GF 4070S (around 15% difference)
+While researching the hardware requirements for the fine-tuning process, I noticed that the Nvidia L4 on the Google Colab platform which I'm using, is quite similar to my GeForce RTX 4070 SUPER. 
 
-This means that my GeForce RTX 4070 SUPER should be slightly faster but unable to load larger models due to the lower RAM capacity, which is clearly demonstrated here: [Fine-tuning VRAM requirements](https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements#fine-tuning-vram-requirements)
+| GPU Model | Memory Bandwidth | Memory | FP32 TFLOPS | FP16 TFLOPS | BP16 TFLOPS | Tensor Cores |
+|-----------|------------------|--------|-------------|-------------|-------------|--------------|
+| [L4](https://www.techpowerup.com/gpu-specs/l4.c4091) | 300 GB/s | 24 GB GDDR6 | 30.29 | 30.29 | - | 240 |
+| [4070 Super](https://www.techpowerup.com/gpu-specs/geforce-rtx-4070-super.c4186) | 504 GB/s | 12 GB GDDR6X | 35.48 | 35.48 | - | 224 |
+| [A100](https://www.techpowerup.com/gpu-specs/a100-sxm4-40-gb.c3506) | 1,555 GB/s | 40 GB HBM2e | 19.5 | 77.97 | 311.84 | 432 |
+
+
+This means that my GeForce RTX 4070 SUPER should be slightly faster but unable to load larger models due to the lower RAM capacity, which is clearly demonstrated here: [Fine-tuning VRAM requirements](https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements#fine-tuning-vram-requirements).
+
+There is also the NVIDIA A100, a bit older architecture, but designer for parallel processing in data centers. Its architecture is fundamentally architected for massive throughput—processing enormous blocks of data simultaneously—rather than the low-latency responsiveness required for graphics rendering.
 
 I initially followed the instructions from [Installing Unsloth on Windows](https://unsloth.ai/docs/get-started/install/windows-installation). I attempted both WSL and direct installation approaches, but encountered significant issues with both methods. Ultimately, I found that using Docker was considerably more straightforward and worked almost out of the box, probably thats why they wrote: "Docker might be the easiest way for Windows users to get started with Unsloth" XD
 
-The largest model I was able to load was a 14B model quantized to 4-bit, which consumed approximately 11.5 GB of RAM. The difference in execution time was a bit larger than I expected, for example:
-- 11:32 on L4 vs 09:18 on GF 4070S
-- 15:50 on L4 vs 20:02 on GF 4070S
-
-This translates to approximately 20% faster performance.
+The largest model I was able to load was only a 8B model quantized to 4-bit as expected. 
 
 It was also interesting to observe the GPU operating at nearly 100% utilization and see it burn.
 
@@ -182,3 +181,7 @@ The conclusion is that using cloud models is more convenient, cheaper, and provi
 
 - [Run and Deploy LLMs on your Phone](https://unsloth.ai/docs/basics/deploy-llms-phone)
 - [React Native AI](https://github.com/callstackincubator/ai)
+
+## License
+
+MIT
