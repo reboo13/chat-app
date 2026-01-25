@@ -173,7 +173,7 @@ It was also interesting to observe the GPU operating at nearly 100% utilization 
 
 <img width="480" src="https://i.giphy.com/yr7n0u3qzO9nG.webp" alt="" />
 
-<img width="480" alt="Screenshot 2025-10-31 105334" src="https://github.com/user-attachments/assets/5226c9a7-f001-49f2-a963-971392b3894a" />
+<img width="1024"  src="https://github.com/user-attachments/assets/b8af0116-f78e-4c87-9f52-2c6e2495c550" alt="" />
 
 The conclusion is that using cloud models is more convenient, cheaper, and provides more flexibility, as you can purchase higher-tier plans with better GPU/RAM configurations. However, I wanted to try running this locally out of curiosity.
 
